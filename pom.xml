@@ -140,6 +140,11 @@
             <artifactId>modelmapper</artifactId>
             <version>2.3.5</version>
         </dependency>
+        <!-- Flyway -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -150,39 +155,26 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        <!--<plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.5.1</version>
-            <configuration>
-                <source>${java.version}</source>
-                <target>${java.version}</target>
-                <annotationProcessorPaths>
-                    <path>
-                        <groupId>org.mapstruct</groupId>
-                        <artifactId>mapstruct-processor</artifactId>
-                        <version>1.4.1.Final</version>
-                    </path>
-                    <path>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>${org.projectlombok.version}</version>
-                    </path>
-                    &lt;!&ndash; This is needed when using Lombok 1.8.16 and above
-                    <path>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId> lombok-mapstruct-binding</artifactId>
-                        <version>0.1.0</version>
-                    </path>&ndash;&gt;
-                </annotationProcessorPaths>
-                <compilerArgs>
-                    <compilerArg>
-                        -Amapstruct.defaultComponentModel=spring
-                    </compilerArg>
-                </compilerArgs>
-            </configuration>
-        </plugin>
-        </plugins>-->
+        <plugins>
+            <!--generate sql script-->
+            <plugin>
+                <groupId>de.jpdigital</groupId>
+                <artifactId>hibernate51-ddl-maven-plugin</artifactId>
+                <version>2.1.0</version>
+                <configuration>
+                    <outputDirectory>${project.build.resources[0].directory}/db/sql</outputDirectory>
+                    <outputFileNamePrefix>init_</outputFileNamePrefix>
+                    <outputFileNameSuffix>-${project.artifactId}</outputFileNameSuffix>
+                    <createDropStatements>false</createDropStatements>
+                    <dialects>
+                        <param>postgresql</param>
+                        <param>oracle12c</param>
+                    </dialects>
+                    <packages>
+                        <param>com.monolithmind</param>
+                    </packages>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
